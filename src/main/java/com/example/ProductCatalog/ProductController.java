@@ -1,10 +1,10 @@
 package com.example.ProductCatalog;
 
-import com.example.ProductCatalog.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable long id) {
         Product product = products.get(id);
-        if (product!= null) {
+        if (product != null) {
             return ResponseEntity.ok(product);
         } else {
             return ResponseEntity.notFound().build();
@@ -46,6 +46,10 @@ public class ProductController {
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         long newId = counter.incrementAndGet();
         product.setId(newId);
+
+
+        product.setDueDate(LocalDate.now().plusDays(5));
+
         products.put(newId, product);
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
@@ -70,4 +74,3 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 }
-
